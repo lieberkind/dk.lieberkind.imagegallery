@@ -22,7 +22,8 @@ public class ImageCache {
         if(instance != null) {
             return instance;
         } else {
-            return new ImageCache();
+            instance = new ImageCache();
+            return instance;
         }
     }
 

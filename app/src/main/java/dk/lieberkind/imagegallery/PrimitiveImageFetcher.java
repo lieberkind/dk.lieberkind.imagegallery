@@ -41,7 +41,7 @@ public class PrimitiveImageFetcher implements ImageFetcher {
             try {
                 images.add(fetchImage(paths.getString(i)));
             } catch (JSONException e) {
-                // Do nothing, just continue
+                // TODO: Throw something like a FetchingException
             }
         }
 
