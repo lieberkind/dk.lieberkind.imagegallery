@@ -18,7 +18,7 @@ import java.util.ArrayList;
 /**
  * Created by tomaslieberkind on 05/05/15.
  */
-public class PrimitiveImageFetcher implements ImageFetcher {
+public class SequentialImageFetcher implements ImageFetcher {
     private static final String BASE_URL = "http://www.itu.dk/people/jacok/MMAD/services/images/";
 
     /**

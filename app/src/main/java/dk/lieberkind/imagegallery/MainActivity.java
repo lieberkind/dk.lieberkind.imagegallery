@@ -1,20 +1,26 @@
 package dk.lieberkind.imagegallery;
 
-import android.support.v7.app.ActionBarActivity;
+import android.graphics.Bitmap;
+import android.os.AsyncTask;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.PagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends FragmentActivity {
+
+    private ViewPager mPager;
+
+    private PagerAdapter mPagerAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,5 +60,78 @@ public class MainActivity extends ActionBarActivity {
         super.onDestroy();
 
         System.out.println("Destroying activity");
+    }
+
+    private class DownloadImagesTask extends AsyncTask<Void, Void, ArrayList<Bitmap>> {
+
+        private ImageCache imageCache;
+        private ImageFetcher imageFetcher;
+
+        /**
+         * Create an instance of this task
+         */
+        public DownloadImagesTask() {
+            imageCache = ImageCache.getInstance();
+            imageFetcher = new SequentialImageFetcher();
+        }
+
+        /**
+         * Fetch a list of images
+         *
+         * @param arguments The non-existing arguments
+         * @return The fetched images
+         */
+        @Override
+        protected ArrayList<Bitmap> doInBackground(Void... arguments) {
+
+            // If our cache isn't empty, we simple fetch images from there
+            if(!imageCache.empty()) {
+                System.out.println("Fetching images from cache...");
+                return imageCache.all();
+            }
+
+            System.out.println("Fetching images from server...");
+
+            // If our cache is empty, we fetch the images and make sure to
+            // add them to the cache before returning them
+            ArrayList<Bitmap> images = imageFetcher.fetch();
+
+            for(int i = 0; i < images.size(); i++) {
+                imageCache.addImage(images.get(i));
+            }
+
+            return images;
+        }
+
+        @Override
+        protected void onPostExecute(ArrayList<Bitmap> images) {
+            if(images != null) {
+                System.out.println("Images fetched: " + images.size());
+
+                mPager = (ViewPager) MainActivity.this.findViewById(R.id.slides);
+                mPagerAdapter = new ImagePagerAdapter(MainActivity.this.getSupportFragmentManager(), images);
+                mPager.setAdapter(mPagerAdapter);
+            }
+        }
+    }
+
+    private class ImagePagerAdapter extends FragmentPagerAdapter {
+
+        List<Bitmap> images;
+
+        public ImagePagerAdapter(FragmentManager fm, List<Bitmap> images) {
+            super(fm);
+            this.images = images;
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            return ImageFragment.create(images.get(position), "Cool Title, dawg!");
+        }
+
+        @Override
+        public int getCount() {
+            return images.size();
+        }
     }
 }
