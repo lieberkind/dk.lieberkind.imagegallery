@@ -1,5 +1,6 @@
 package dk.lieberkind.imagegallery;
 
+import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -12,6 +13,11 @@ public class MainActivity extends FragmentActivity
         implements ThumbnailFragment.OnThumbnailClickedListener {
 
     private final String THUMBNAIL_FRAGMENT_TAG = "thumbnails";
+
+    /**
+     * Progress dialog to show while fetching images
+     */
+    private ProgressDialog progress;
 
     /**
      * The ImageCache from where already fetched images can be retrieved
@@ -93,6 +99,17 @@ public class MainActivity extends FragmentActivity
         }
 
         /**
+         * Run before we start fetching the images
+         */
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            // Show a progress dialog
+            progress = ProgressDialog.show(MainActivity.this, "Fetching images", "Just a moment...");
+        }
+
+        /**
          * Fetch a list of images
          *
          * @param arguments The non-existing arguments
@@ -110,6 +127,10 @@ public class MainActivity extends FragmentActivity
          */
         @Override
         protected void onPostExecute(ArrayList<Image> images) {
+
+            // Hide the progress dialog
+            progress.dismiss();
+
             if(images != null) {
                 // Set the images in the activity
                 MainActivity.this.mImages = images;
