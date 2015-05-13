@@ -11,7 +11,7 @@ import java.util.ArrayList;
 public class MainActivity extends FragmentActivity
         implements ThumbnailFragment.OnThumbnailClickedListener {
 
-    private final String THUMBNAIL_FRAGMENT_TAG = "thumbnail";
+    private final String THUMBNAIL_FRAGMENT_TAG = "thumbnails";
 
     /**
      * The ImageCache from where already fetched images can be retrieved
