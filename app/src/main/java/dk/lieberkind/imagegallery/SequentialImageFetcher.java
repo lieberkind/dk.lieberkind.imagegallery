@@ -16,9 +16,14 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 
 /**
- * Created by tomaslieberkind on 05/05/15.
+ * This class fetches images from the provided server. It fetches them sequentially, and could be
+ * optimized by sending of requests for the images in parallel
  */
 public class SequentialImageFetcher implements ImageFetcher {
+
+    /**
+     * The base URL of the server from which we fetch the images
+     */
     private static final String BASE_URL = "http://www.itu.dk/people/jacok/MMAD/services/images/";
 
     /**
@@ -45,7 +50,7 @@ public class SequentialImageFetcher implements ImageFetcher {
 
                 images.add(image);
             } catch (JSONException e) {
-                // TODO: Throw something like a FetchingException
+                e.printStackTrace();
             }
         }
 

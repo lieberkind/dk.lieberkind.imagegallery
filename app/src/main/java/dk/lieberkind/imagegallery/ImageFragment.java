@@ -11,13 +11,28 @@ import android.widget.TextView;
 
 
 /**
- * A simple {@link Fragment} subclass.
+ * This class decides how a single item in the gallery should look
  */
 public class ImageFragment extends Fragment {
 
+    /**
+     * The actual image
+     */
     private Bitmap image;
+
+    /**
+     * The image title
+     */
     private String title;
 
+    /**
+     * Static method for creating an instance of this fragment populated with relevant data
+     *
+     * @param image Image bitmap
+     * @param title Image title
+     *
+     * @return New instance of ImageFragment
+     */
     public static ImageFragment create(Bitmap image, String title) {
         ImageFragment imageFragment = new ImageFragment();
         imageFragment.image = image;
@@ -25,6 +40,13 @@ public class ImageFragment extends Fragment {
         return imageFragment;
     }
 
+    /**
+     * The onCreate lifecycle method
+     *
+     * This is only used to restore the instance state on configuration changes
+     *
+     * @param savedInstanceState
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +57,17 @@ public class ImageFragment extends Fragment {
         }
     }
 
+    /**
+     * The onCreateView lifecycle method
+     *
+     * Here we initialize everything that has to do with the fragment's view
+     *
+     * @param inflater Layout inflater
+     * @param container Container for the fragment's view
+     * @param savedInstanceState Bundle containing the saved instance state
+     *
+     * @return The fragment's view
+     */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -50,6 +83,13 @@ public class ImageFragment extends Fragment {
         return view;
     }
 
+    /**
+     * The onSaveInstanceState lifecycle method
+     *
+     * Here we save the image title and bitmap
+     *
+     * @param outState Bundle to contain state
+     */
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -57,5 +97,4 @@ public class ImageFragment extends Fragment {
         outState.putParcelable("image", image);
         outState.putString("title", title);
     }
-
 }
