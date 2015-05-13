@@ -67,7 +67,9 @@ public class GalleryFragment extends Fragment {
     }
 
     /**
-     * The onCreate lifecycle method, here we create as much of the fragments state as possible
+     * The onCreate lifecycle method
+     *
+     * Here we create as much of the fragments state as possible
      *
      * @param savedInstanceState Bundle containing the saved instance state
      */
@@ -87,14 +89,15 @@ public class GalleryFragment extends Fragment {
     }
 
     /**
-     * The onCreateView lifecycle method, here we initialize everything that has to do with the
-     * fragments view
+     * The onCreateView lifecycle method
+     *
+     * Here we initialize everything that has to do with the fragment's view
      *
      * @param inflater Layout inflater
      * @param container Container for the fragment's view
      * @param savedInstanceState Bundle containing the saved instance state
      *
-     * @return The fragments view
+     * @return The fragment's view
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
