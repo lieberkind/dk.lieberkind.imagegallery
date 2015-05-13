@@ -3,7 +3,6 @@ package dk.lieberkind.imagegallery;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -13,7 +12,6 @@ import android.view.ViewGroup;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -45,16 +43,11 @@ public class GalleryFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        System.out.println("GalleryFragment: onCreate");
-
         if(savedInstanceState != null) {
             mPosition = savedInstanceState.getInt("position");
-            System.out.println("Restored position:" + mPosition);
 
             if(!imageCache.empty()) {
                 mImages = imageCache.all();
-
-                System.out.println("Restored images: " + mImages.size());
             }
         }
     }
@@ -72,9 +65,6 @@ public class GalleryFragment extends Fragment {
         mPager = (ViewPager) view.findViewById(R.id.slides);
         mPager.setAdapter(mPagerAdapter);
         mPager.setCurrentItem(mPosition);
-
-        // TODO: Delete the following line, if everything seems to work correctly...
-        // mPagerAdapter.notifyDataSetChanged();
 
         return view;
     }
