@@ -1,7 +1,5 @@
 package dk.lieberkind.imagegallery;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
 
 /**
@@ -14,5 +12,5 @@ public interface ImageFetcher {
      *
      * @return The fetched images
      */
-    public ArrayList<Bitmap> fetch();
+    public ArrayList<Image> fetch();
 }

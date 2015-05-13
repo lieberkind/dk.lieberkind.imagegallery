@@ -27,9 +27,9 @@ public class SequentialImageFetcher implements ImageFetcher {
      * @return The fetched images
      */
     @Override
-    public ArrayList<Bitmap> fetch() {
+    public ArrayList<Image> fetch() {
 
-        ArrayList<Bitmap> images = new ArrayList<>();
+        ArrayList<Image> images = new ArrayList<>();
 
         JSONArray paths = getImagePaths();
 
@@ -39,7 +39,11 @@ public class SequentialImageFetcher implements ImageFetcher {
 
         for(int i = 0; i < paths.length(); i++) {
             try {
-                images.add(fetchImage(paths.getString(i)));
+                String path = paths.getString(i);
+
+                Image image = new Image(fetchImage(path), path.substring(4));
+
+                images.add(image);
             } catch (JSONException e) {
                 // TODO: Throw something like a FetchingException
             }

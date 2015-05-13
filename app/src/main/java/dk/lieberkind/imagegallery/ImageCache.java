@@ -1,16 +1,13 @@
 package dk.lieberkind.imagegallery;
 
-import android.graphics.Bitmap;
-
 import java.util.ArrayList;
-import java.util.Collection;
 
 /**
  * Created by tomaslieberkind on 05/05/15.
  */
 public class ImageCache {
 
-    private ArrayList<Bitmap> images;
+    private ArrayList<Image> images;
 
     private static ImageCache instance;
 
@@ -27,19 +24,15 @@ public class ImageCache {
         }
     }
 
-    public void addImage(Bitmap image) {
+    public void addImage(Image image) {
         images.add(image);
     }
 
-    public ArrayList<Bitmap> all() {
+    public ArrayList<Image> all() {
         return images;
     }
 
     public boolean empty() {
         return images.isEmpty();
-    }
-
-    public int count() {
-        return images.size();
     }
 }

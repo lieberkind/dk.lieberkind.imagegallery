@@ -1,6 +1,5 @@
 package dk.lieberkind.imagegallery;
 
-import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -10,11 +9,11 @@ import android.os.Bundle;
 import java.util.ArrayList;
 
 
-public class MainActivity extends FragmentActivity {
+public class MainActivity extends FragmentActivity implements ThumbnailFragment.OnThumbnailClickedListener {
 
-    private ImageCache imageCache;
+    private ImageCache imageCache = ImageCache.getInstance();
 
-    private ArrayList<Bitmap> images;
+    private ArrayList<Image> images = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,21 +23,31 @@ public class MainActivity extends FragmentActivity {
         if(savedInstanceState == null) {
             FragmentManager fm = getSupportFragmentManager();
             FragmentTransaction transaction = fm.beginTransaction();
-            transaction.add(R.id.frame, new GalleryFragment(), "gallery");
+            transaction.add(R.id.frame, new ThumbnailFragment(), "thumbnails");
             transaction.commit();
         }
-
-        imageCache = ImageCache.getInstance();
 
         if(!imageCache.empty()) {
             images = imageCache.all();
         } else {
             new DownloadImagesTask().execute();
         }
-
     }
 
-    private class DownloadImagesTask extends AsyncTask<Void, Void, ArrayList<Bitmap>> {
+    @Override
+    public void onThumbnailClicked(int position) {
+        System.out.println("I was pressed");
+
+        GalleryFragment gf = GalleryFragment.create(images, position);
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction transaction = fm.beginTransaction();
+        transaction.replace(R.id.frame, gf);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    private class DownloadImagesTask extends AsyncTask<Void, Void, ArrayList<Image>> {
 
         private ImageFetcher imageFetcher;
 
@@ -56,7 +65,7 @@ public class MainActivity extends FragmentActivity {
          * @return The fetched images
          */
         @Override
-        protected ArrayList<Bitmap> doInBackground(Void... arguments) {
+        protected ArrayList<Image> doInBackground(Void... arguments) {
             return imageFetcher.fetch();
         }
 
@@ -66,15 +75,19 @@ public class MainActivity extends FragmentActivity {
          * @param images The fetched images
          */
         @Override
-        protected void onPostExecute(ArrayList<Bitmap> images) {
-            if(images != null) {
+        protected void onPostExecute(ArrayList<Image> images) {
 
-                for(Bitmap image : images) {
+            System.out.println("AsyncTask: onPostExecute");
+
+            if(images != null) {
+                MainActivity.this.images = images;
+
+                for(Image image : images) {
                     imageCache.addImage(image);
                 }
 
-                GalleryFragment gallery = (GalleryFragment) getSupportFragmentManager().findFragmentByTag("gallery");
-                gallery.setImages(images);
+                ThumbnailFragment thumbnails = (ThumbnailFragment) getSupportFragmentManager().findFragmentByTag("thumbnails");
+                thumbnails.setImages(images);
             }
         }
     }
